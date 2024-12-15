@@ -1,8 +1,12 @@
 import { useContext } from "react";
 import { authContext } from "../Provider/AuthProvider";
+import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Login() {
-  const { userLogin ,setUser} = useContext(authContext);
+  const { userLogin, setUser } = useContext(authContext);
+  const navigate = useNavigate(); // Call the hook correctly
+  const location = useLocation(); // Call the hook correctly
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -11,9 +15,16 @@ export default function Login() {
 
     userLogin(email, password)
       .then((res) => {
-        console.log("User created:", res.user);
-        alert("login successful")
-        setUser(res.user)
+        console.log("User logged in:", res.user);
+        alert("Login successful");
+        setUser(res.user);
+        const user={email:email}
+        axios.post("http://localhost:5000/jwt",user,{withCredentials:true})
+        .then(data=> console.log(data.data))
+        
+        // Ensure navigation happens to the correct route
+        const redirectPath = location.state?.from || "/"; // Default to "/" if no state
+        navigate(redirectPath); // Navigate to the previous route or home
       })
       .catch((err) => {
         console.error("Error:", err.message);
@@ -49,7 +60,7 @@ export default function Login() {
                 </label>
               </div>
               <div className="form-control mt-6">
-                <button className="btn btn-primary">Sign Up</button>
+                <button type="submit" className="btn btn-primary">Login</button> {/* Change button text */}
               </div>
             </form>
           </div>

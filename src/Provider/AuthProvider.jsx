@@ -24,7 +24,7 @@ export default function AuthProvider({children}) {
     return signInWithEmailAndPassword(auth,email,password)
   }
 
-  const userLogout=()=>{
+  const userLogOut=()=>{
     return signOut(auth)
   }
 
@@ -40,7 +40,7 @@ export default function AuthProvider({children}) {
     createUser,
     updateUserProfile,
     userLogin,
-    userLogout
+    userLogOut
   }
 
   useEffect(()=>{
